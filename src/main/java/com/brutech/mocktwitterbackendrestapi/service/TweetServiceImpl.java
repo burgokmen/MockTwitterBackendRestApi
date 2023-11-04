@@ -3,10 +3,11 @@ package com.brutech.mocktwitterbackendrestapi.service;
 import com.brutech.mocktwitterbackendrestapi.entity.Tweet;
 import com.brutech.mocktwitterbackendrestapi.repository.TweetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class TweetServiceImpl implements TweetService{
     private TweetRepository tweetRepository;
 
