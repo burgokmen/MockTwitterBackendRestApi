@@ -34,7 +34,7 @@ Postgres Sql
 
 **Tweet İşlemleri:**
 
-| Request  | URL                       | Tanım                 |
+| Request  | URL                       | Definition            |
 | -------  | ------------------------- | --------------------- |
 | GET      | `${URL}/tweet/`           | getAllTweets          |
 | GET      | `${URL}/tweet/id`         | getAllTweetsById      |
