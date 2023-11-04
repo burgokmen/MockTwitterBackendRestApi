@@ -41,10 +41,10 @@ public class Profile {
     private List<Tweet> tweetsList;
 
     @OneToMany(mappedBy = "followedUser")
-    private Set<FollowToFollow> followedUserList;
+    private List<FollowToFollow> followedUserList;
 
     @OneToMany(mappedBy = "followerUser")
-    private Set<FollowToFollow> followerUserList;
+    private List<FollowToFollow> followerUserList;
 
     public void addTweet(Tweet tweet) {
         if(tweetsList == null) {
@@ -55,14 +55,14 @@ public class Profile {
 
     public void addFollowedUser(FollowToFollow followToFollow) {
         if(followedUserList == null) {
-            followedUserList = new HashSet<>();
+            followedUserList = new LinkedList<>();
         }
         followedUserList.add(followToFollow);
     }
 
     public void addFollowerUser(FollowToFollow followToFollow) {
         if(followerUserList == null) {
-            followerUserList = new HashSet<>();
+            followerUserList = new LinkedList<>();
         }
         followerUserList.add(followToFollow);
     }
