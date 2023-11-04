@@ -16,17 +16,17 @@ public class Tweet {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "tweet_boody")
-    private String tweetBoody;
+    @Column(name = "tweet_body")
+    private String tweetBody;
 
     @Column(name ="comments_number")
-    private int commentsNumber;
+    private long commentsNumber;
 
     @Column(name = "retweets_number")
-    private int retweetsNumber;
+    private long retweetsNumber;
 
     @Column(name = "likes_number")
-    private int likesNumber;
+    private long     likesNumber;
 
     @Column(name = "created_at")
     private Date createdAt;
