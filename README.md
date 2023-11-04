@@ -58,10 +58,6 @@ Postgres Sql
 
 You can view a live demo of this project at .
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
 ## Contact
 
 If you have any questions or feedback, please feel free to contact me at brunogokmen@gmail.com 
