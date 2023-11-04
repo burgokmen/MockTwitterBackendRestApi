@@ -22,22 +22,22 @@ public class TweetController {
     }
 
     @GetMapping("/{id}")
-    public Tweet getTweetById(Long id){
+    public Tweet getTweetById(@PathVariable Long id){
         return tweetService.getTweetById(id);
     }
 
     @PostMapping("/")
-    public Tweet saveTweet(Tweet tweet){
+    public Tweet saveTweet(@RequestBody Tweet tweet){
         return tweetService.saveTweet(tweet);
     }
 
     @PutMapping("/{id}")
-    public Tweet updateTweet(Long id, Tweet tweet){
+    public Tweet updateTweet(@PathVariable Long id,@RequestBody Tweet tweet){
         return tweetService.saveTweet(tweet);
     }
 
     @DeleteMapping("/{id}")
-    public Tweet deleteTweet(Long id){
+    public Tweet deleteTweet(@PathVariable Long id){
         return tweetService.deleteTweet(id);
     }
 

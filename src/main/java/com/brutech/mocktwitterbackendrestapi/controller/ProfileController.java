@@ -3,10 +3,7 @@ package com.brutech.mocktwitterbackendrestapi.controller;
 import com.brutech.mocktwitterbackendrestapi.entity.Profile;
 import com.brutech.mocktwitterbackendrestapi.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/profile")
@@ -18,12 +15,12 @@ public class ProfileController {
     }
 
     @PostMapping("/")
-    public Profile registerUser(Profile profile){
+    public Profile registerUser(@RequestBody Profile profile){
         return profileService.saveUser(profile);
     }
 
     @DeleteMapping("/{id}")
-    public Profile deleteUser(Long id){
+    public Profile deleteUser(@PathVariable Long id){
         return profileService.deleteUser(id);
     }
 }
