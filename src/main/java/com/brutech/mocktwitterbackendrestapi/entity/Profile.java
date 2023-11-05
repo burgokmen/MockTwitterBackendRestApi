@@ -28,6 +28,9 @@ public class Profile {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "cellular")
     private String cellular;
 
@@ -36,6 +39,12 @@ public class Profile {
 
     @Column(name = "created_at")
     private Date createdAt;
+
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "profile_picture")
+    private String profilePicture;
 
     @OneToMany(mappedBy = "profile")
     private List<Tweet> tweetsList;
