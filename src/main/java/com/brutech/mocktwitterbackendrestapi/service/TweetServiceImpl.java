@@ -43,4 +43,9 @@ public class TweetServiceImpl implements TweetService{
         tweetRepository.delete(tweet);
         return tweet;
     }
+
+    @Override
+    public List<Tweet> getAllTweetsByUserId(Long id) {
+        return tweetRepository.getTweetByUserId(Math.toIntExact(id));
+    }
 }
