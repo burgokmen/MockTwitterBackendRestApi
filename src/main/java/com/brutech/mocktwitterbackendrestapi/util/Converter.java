@@ -6,13 +6,17 @@ import com.brutech.mocktwitterbackendrestapi.dto.TweetResponse;
 import com.brutech.mocktwitterbackendrestapi.entity.Profile;
 import com.brutech.mocktwitterbackendrestapi.entity.Tweet;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Converter {
     public static ProfileResponse profileResponseConverter(Profile profile){
-        return new ProfileResponse(profile.getUserHandle(), profile.getFirstName(), profile.getLastName(),
-                profile.getEmail(), profile.getPassword(), profile.getCellular(), profile.getBirthday(),
-                profile.getCreatedAt(), profile.getLocation(), profile.getProfilePicture());
+        return new ProfileResponse(profile.getUserHandle(), profile.getFirstName(),
+                profile.getLastName(), profile.getEmail(), profile.getPassword(),
+                profile.getCellular(), formatDate(profile.getBirthday()),
+                formatDate(profile.getCreatedAt()), profile.getLocation(),
+                profile.getProfilePicture());
     }
 
     public static List<ProfileResponse> profileResponseListConverter(List<Profile> profileList){
@@ -20,7 +24,8 @@ public class Converter {
     }
 
     public static ProfileTweetResponse profileTweetResponseConverter(Profile profile){
-        return new ProfileTweetResponse(profile.getFirstName(), profile.getLastName(), profile.getProfilePicture(),
+        return new ProfileTweetResponse(profile.getFirstName(), profile.getLastName(),
+                profile.getProfilePicture(),
                 profile.getUserHandle());
     }
 
@@ -29,11 +34,18 @@ public class Converter {
     }
 
     public static TweetResponse tweetResponseConverter(Tweet tweet){
-        return new TweetResponse(tweet.getTweetBody(), tweet.getCommentsNumber(), tweet.getRetweetsNumber(),
-                tweet.getLikesNumber(), tweet.getCreatedAt(), profileTweetResponseConverter(tweet.getProfile()));
+        return new TweetResponse(tweet.getId(), tweet.getTweetBody(),
+                tweet.getCommentsNumber(), tweet.getRetweetsNumber(),
+                tweet.getLikesNumber(), formatDate(tweet.getCreatedAt()),
+                profileTweetResponseConverter(tweet.getProfile()));
     }
 
     public static List<TweetResponse> tweetResponseListConverter(List<Tweet> tweetList){
         return tweetList.stream().map(Converter::tweetResponseConverter).toList();
+    }
+
+    public static String formatDate(LocalDate date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return date.format(formatter);
     }
 }
