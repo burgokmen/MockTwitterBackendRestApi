@@ -1,44 +1,57 @@
 package com.brutech.mocktwitterbackendrestapi.controller;
 
+import com.brutech.mocktwitterbackendrestapi.dto.TweetResponse;
+import com.brutech.mocktwitterbackendrestapi.entity.Profile;
 import com.brutech.mocktwitterbackendrestapi.entity.Tweet;
+import com.brutech.mocktwitterbackendrestapi.service.ProfileService;
 import com.brutech.mocktwitterbackendrestapi.service.TweetService;
+import com.brutech.mocktwitterbackendrestapi.util.Converter;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/tweet")
 public class TweetController {
     private TweetService tweetService;
+    private ProfileService profileService;
     @Autowired
-    public TweetController(TweetService tweetService) {
+    public TweetController(TweetService tweetService, ProfileService profileService) {
         this.tweetService = tweetService;
+        this.profileService = profileService;
     }
 
+
     @GetMapping("/")
-    public List<Tweet> getAllTweets(){
-        return tweetService.getAllTweets();
+    public List<TweetResponse> getAllTweets(){
+        return Converter.tweetResponseListConverter(tweetService.getAllTweets());
     }
 
     @GetMapping("/{id}")
-    public Tweet getTweetById(@PathVariable Long id){
-        return tweetService.getTweetById(id);
+    public TweetResponse getTweetById(@PathVariable Long id){
+        return Converter.tweetResponseConverter(tweetService.getTweetById(id));
     }
 
     @PostMapping("/")
-    public Tweet saveTweet(@RequestBody Tweet tweet){
-        return tweetService.saveTweet(tweet);
+    public TweetResponse saveTweet(@RequestBody Tweet tweet){
+        Profile profile = profileService.getUserById(tweet.getProfile().getId());
+        tweet.setProfile(profile);
+        return Converter.tweetResponseConverter(tweetService.saveTweet(tweet));
     }
 
     @PutMapping("/{id}")
-    public Tweet updateTweet(@PathVariable Long id,@RequestBody Tweet tweet){
-        return tweetService.saveTweet(tweet);
+    public TweetResponse updateTweet(@RequestBody Tweet tweet, @PathVariable long id){
+        Profile profile = profileService.getUserById(tweet.getProfile().getId());
+        tweet.setProfile(profile);
+        tweet.setId(id);
+        return Converter.tweetResponseConverter(tweetService.saveTweet(tweet));
     }
 
     @DeleteMapping("/{id}")
-    public Tweet deleteTweet(@PathVariable Long id){
-        return tweetService.deleteTweet(id);
+    public TweetResponse deleteTweet(@PathVariable Long id){
+        return Converter.tweetResponseConverter(tweetService.deleteTweet(id));
     }
 
 
