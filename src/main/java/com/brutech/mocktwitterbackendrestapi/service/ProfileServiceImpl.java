@@ -33,7 +33,7 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
-    public Profile saveUser(Profile profile) {
+    public Profile registerUser(Profile profile) {
         return profileRepository.save(profile);
     }
 

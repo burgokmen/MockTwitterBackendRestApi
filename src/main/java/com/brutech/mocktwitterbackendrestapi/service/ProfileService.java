@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface ProfileService {
     List<Profile> getAllUsers();
     Profile getUserById(Long id);
-    Profile saveUser(Profile profile);
+    Profile registerUser(Profile profile);
     Profile deleteUser(Long id);
 
 }
