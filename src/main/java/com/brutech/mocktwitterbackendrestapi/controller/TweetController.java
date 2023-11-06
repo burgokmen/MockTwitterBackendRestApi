@@ -29,6 +29,11 @@ public class TweetController {
         return Converter.tweetResponseListConverter(tweetService.getAllTweets());
     }
 
+    @GetMapping("/profile/{UserId}")
+    public List<TweetResponse> getAllTweetsByUserId(@PathVariable Long UserId){
+        return Converter.tweetResponseListConverter(tweetService.getAllTweetsByUserId(UserId));
+    }
+
     @GetMapping("/{id}")
     public TweetResponse getTweetById(@PathVariable Long id){
         return Converter.tweetResponseConverter(tweetService.getTweetById(id));
