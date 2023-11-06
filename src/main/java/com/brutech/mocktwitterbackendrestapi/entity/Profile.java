@@ -47,6 +47,9 @@ public class Profile {
     @Column(name = "profile_picture")
     private String profilePicture;
 
+    @Column(name = "profile_walpaper")
+    private String profileWalpaper;
+
     @OneToMany(mappedBy = "profile")
     private List<Tweet> tweetsList;
 
