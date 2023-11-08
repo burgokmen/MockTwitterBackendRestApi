@@ -1,8 +1,10 @@
 package com.brutech.mocktwitterbackendrestapi.service;
 
 import com.brutech.mocktwitterbackendrestapi.entity.Profile;
+import com.brutech.mocktwitterbackendrestapi.exceptions.TwitterException;
 import com.brutech.mocktwitterbackendrestapi.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,12 +30,18 @@ public class ProfileServiceImpl implements ProfileService{
               return profileOptional.get();
           }
           else {
-              throw new RuntimeException("User not found for id :: " + id);
+              throw new TwitterException("User not found for id : " + id, HttpStatus.NOT_FOUND);
           }
     }
 
     @Override
     public Profile registerUser(Profile profile) {
+        String email = profileRepository.emailChecker(profile.getEmail());
+        String cellular = profileRepository.phoneChecker(profile.getCellular();
+        String userHandle = profileRepository.usernameChecker(profile.getUserHandle());
+        if (email != null || cellular != null || userHandle != null){
+             throw new TwitterException("Credentials already exists", HttpStatus.BAD_REQUEST);
+        }
         return profileRepository.save(profile);
     }
 

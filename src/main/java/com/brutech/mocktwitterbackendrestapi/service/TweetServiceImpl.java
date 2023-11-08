@@ -1,8 +1,11 @@
 package com.brutech.mocktwitterbackendrestapi.service;
 
+import com.brutech.mocktwitterbackendrestapi.entity.Profile;
 import com.brutech.mocktwitterbackendrestapi.entity.Tweet;
+import com.brutech.mocktwitterbackendrestapi.exceptions.TwitterException;
 import com.brutech.mocktwitterbackendrestapi.repository.TweetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,12 +31,17 @@ public class TweetServiceImpl implements TweetService{
             return tweetOptional.get();
         }
         else {
-            throw new RuntimeException("Tweet not found for id :: " + id);
+            throw new TwitterException("Tweet not found for id :: " + id, HttpStatus.NOT_FOUND);
         }
     }
 
     @Override
     public Tweet saveTweet(Tweet tweet) {
+        if(tweet.getTweetBody()== null || tweet.getTweetBody().isEmpty()){
+            throw new TwitterException("Tweet body cannot be empty", HttpStatus.BAD_REQUEST);
+        }
+        Profile profile = tweet.getProfile();
+        profile.addTweet(tweet);
         return tweetRepository.save(tweet);
     }
 
@@ -46,6 +54,14 @@ public class TweetServiceImpl implements TweetService{
 
     @Override
     public List<Tweet> getAllTweetsByUserId(Long id) {
-        return tweetRepository.getTweetByUserId(Math.toIntExact(id));
+        List<Tweet> tweetList = tweetRepository.getTweetByUserId(Math.toIntExact(id));
+        if (!tweetList.isEmpty()){
+            return tweetList;
+        }
+        else {
+            throw new TwitterException("Tweet not found for user id :: " + id, HttpStatus.NOT_FOUND);
+
+        }
+
     }
 }
