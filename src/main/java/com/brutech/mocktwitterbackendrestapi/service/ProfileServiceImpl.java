@@ -30,7 +30,7 @@ public class ProfileServiceImpl implements ProfileService{
               return profileOptional.get();
           }
           else {
-              throw new TwitterException("User not found for id : " + id, HttpStatus.NOT_FOUND);
+              throw new TwitterException("User not found for id :: " + id, HttpStatus.NOT_FOUND);
           }
     }
 
