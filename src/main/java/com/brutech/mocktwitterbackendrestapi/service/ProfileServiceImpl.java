@@ -37,7 +37,7 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public Profile registerUser(Profile profile) {
         String email = profileRepository.emailChecker(profile.getEmail());
-        String cellular = profileRepository.phoneChecker(profile.getCellular();
+        String cellular = profileRepository.phoneChecker(profile.getCellular());
         String userHandle = profileRepository.usernameChecker(profile.getUserHandle());
         if (email != null || cellular != null || userHandle != null){
              throw new TwitterException("Credentials already exists", HttpStatus.BAD_REQUEST);
