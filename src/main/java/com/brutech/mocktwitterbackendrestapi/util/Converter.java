@@ -12,19 +12,21 @@ import java.util.List;
 
 public class Converter {
     public static ProfileResponse profileResponseConverter(Profile profile){
-        return new ProfileResponse(profile.getUserHandle(), profile.getFirstName(),
+        return new ProfileResponse(profile.getId(), profile.getUserHandle(), profile.getFirstName(),
                 profile.getLastName(), profile.getEmail(), profile.getPassword(),
                 profile.getCellular(), formatDate(profile.getBirthday()),
                 formatDate(profile.getCreatedAt()), profile.getLocation(),
                 profile.getProfilePicture());
     }
 
+
+
     public static List<ProfileResponse> profileResponseListConverter(List<Profile> profileList){
         return profileList.stream().map(Converter::profileResponseConverter).toList();
     }
 
     public static ProfileTweetResponse profileTweetResponseConverter(Profile profile){
-        return new ProfileTweetResponse(profile.getFirstName(), profile.getLastName(),
+        return new ProfileTweetResponse(profile.getId(), profile.getFirstName(), profile.getLastName(),
                 profile.getProfilePicture(),
                 profile.getUserHandle());
     }
