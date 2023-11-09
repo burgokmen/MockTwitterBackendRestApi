@@ -5,6 +5,8 @@ import com.brutech.mocktwitterbackendrestapi.exceptions.TwitterException;
 import com.brutech.mocktwitterbackendrestapi.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,5 +53,27 @@ public class ProfileServiceImpl implements ProfileService{
        profileRepository.delete(profile);
        return profile;
     }
+
+    @Override
+    public Optional<Profile> getUserByEmail(String email) {
+      Optional<Profile> profileOptional = profileRepository.getUserByEmail(email);
+        if (profileOptional.isPresent()){
+            return profileOptional;
+        }
+        else {
+            throw new TwitterException("User not found for email :: " + email, HttpStatus.NOT_FOUND);
+        }
+    }
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return (UserDetails) profileRepository.getUserByEmail(email)
+                .orElseThrow(()-> {
+                    return new UsernameNotFoundException("User credentials are not valid");
+        });
+    }
+
+
+
+
 
 }
