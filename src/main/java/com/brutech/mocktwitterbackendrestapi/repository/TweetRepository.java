@@ -11,7 +11,7 @@ public interface TweetRepository extends JpaRepository<Tweet, Long> {
 
     @Query("SELECT t FROM Tweet t " +
             "INNER JOIN t.profile p " +
-            "WHERE p.id = :id" +
+            "WHERE p.id = :id " +
             "ORDER BY t.id DESC")
     public List<Tweet> getTweetByUserId(int id);
 }
