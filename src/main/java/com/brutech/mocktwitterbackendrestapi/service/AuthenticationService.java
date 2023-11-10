@@ -35,7 +35,7 @@ public class AuthenticationService {
     profile1.setCreatedAt(profile.getCreatedAt());
     profile1.setLocation(profile.getLocation());
     profile1.setPassword(encodedPassword);
-    return profileRepository.save(profile1);
+    return profile1;
     }
 
     public Profile login(LoginProfileDto    loginProfileDto){
