@@ -1,8 +1,10 @@
 package com.brutech.mocktwitterbackendrestapi.entity;
 
+import com.brutech.mocktwitterbackendrestapi.exceptions.TwitterException;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -52,6 +54,12 @@ public class Profile implements UserDetails {
     @Column(name = "profile_walpaper")
     private String profileWalpaper;
 
+    @Column(name = "liked_tweets")
+    private List<Long> likedTweetIdsList;
+
+    @Column(name = "s ")
+    private List<Long> retweetsTweetsIdList;
+
     @OneToMany(mappedBy = "profile")
     private List<Tweet> tweetsList;
 
@@ -66,6 +74,46 @@ public class Profile implements UserDetails {
             tweetsList = new ArrayList<>();
         }
         tweetsList.add(tweet);
+    }
+
+    public void addLikedTweetIds(long id) {
+        if (likedTweetIdsList == null) {
+            likedTweetIdsList = new ArrayList<>();
+        }
+        if (!likedTweetIdsList.contains(id)) {
+            likedTweetIdsList.add(id);
+        }
+        throw new TwitterException("User already liked this tweet", HttpStatus.BAD_REQUEST);
+    }
+
+    public void removeLikedTweetIds(long id) {
+        if (likedTweetIdsList == null) {
+            throw new TwitterException("Cannot unlike this tweet", HttpStatus.BAD_REQUEST);
+        }
+        if (likedTweetIdsList.contains(id)) {
+            likedTweetIdsList.remove(id);
+        }
+        throw new TwitterException("Cannot unlike this tweet", HttpStatus.BAD_REQUEST);
+    }
+
+    public void addRetweetsTweetsIdList(long id) {
+        if (retweetsTweetsIdList == null) {
+            retweetsTweetsIdList = new ArrayList<>();
+        }
+        if (!retweetsTweetsIdList.contains(id)) {
+            retweetsTweetsIdList.add(id);
+        }
+        throw new TwitterException("User already retweeted this tweet", HttpStatus.BAD_REQUEST);
+    }
+
+    public void removeRetweetsTweetsIdList(long id) {
+        if (retweetsTweetsIdList == null) {
+            throw new TwitterException("Cannot unretweet this tweet", HttpStatus.BAD_REQUEST);
+        }
+        if (retweetsTweetsIdList.contains(id)) {
+            retweetsTweetsIdList.remove(id);
+        }
+        throw new TwitterException("Cannot unretweet this tweet", HttpStatus.BAD_REQUEST);
     }
 
     public void addFollowedUser(FollowToFollow followToFollow) {
