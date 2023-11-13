@@ -1,7 +1,7 @@
 package com.brutech.mocktwitterbackendrestapi.dto;
 
 import java.util.Date;
+import java.util.List;
 
-public record TweetResponse(long tweetId, String tweetBody, long commentsNumber, long retweetsNumber,
-                            long likesNumber, String createdAt, ProfileTweetResponse profileTweetResponse){
+public record TweetResponse(long tweetId, String tweetBody, String createdAt, ProfileTweetResponse profileTweetResponse, List<Long> likedByUserIdList, List<Long> commentedByTweetIdList, List<Long> retweetedByUserIdList){
 }
