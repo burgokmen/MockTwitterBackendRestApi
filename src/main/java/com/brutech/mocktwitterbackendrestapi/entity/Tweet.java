@@ -1,11 +1,16 @@
 package com.brutech.mocktwitterbackendrestapi.entity;
 
+import com.brutech.mocktwitterbackendrestapi.exceptions.TwitterException;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Entity
 @NoArgsConstructor
@@ -20,14 +25,6 @@ public class Tweet {
     @Column(name = "tweet_body")
     private String tweetBody;
 
-    @Column(name ="comments_number")
-    private long commentsNumber;
-
-    @Column(name = "retweets_number")
-    private long retweetsNumber;
-
-    @Column(name = "likes_number")
-    private long     likesNumber;
 
     @Column(name = "created_at")
     private LocalDate createdAt;
@@ -35,4 +32,78 @@ public class Tweet {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Profile profile;
+
+    @Column(name= "liked_by_userId")
+    private List<Long> likedByUserIdList;
+
+    @Column(name= "retweeted_by_userId")
+    private List<Long> retweetedByUserIdList;
+
+    @Column(name= "commented_by_tweetId")
+    private List<Long> commentedByTweetIdList;
+
+    public void addLikedByUserId(Long userId){
+        if(likedByUserIdList == null){
+            likedByUserIdList = new ArrayList<>();
+        }
+       if (!likedByUserIdList.contains(userId)){
+           likedByUserIdList.add(userId);
+       }
+       throw new TwitterException("User already liked this tweet", HttpStatus.BAD_REQUEST);
+    }
+
+    public void removeLikedByUserId(Long userId){
+        if(likedByUserIdList == null){
+            throw new TwitterException("Cannot unlike this tweet", HttpStatus.BAD_REQUEST);
+        }
+        if (likedByUserIdList.contains(userId)){
+            likedByUserIdList.remove(userId);
+        }
+        throw new TwitterException("Cannot unlike this tweet", HttpStatus.BAD_REQUEST);
+    }
+
+    public void addRetweetedByUserIdList(Long userId){
+        if(retweetedByUserIdList == null){
+            retweetedByUserIdList = new ArrayList<>();
+        }
+        if (!retweetedByUserIdList.contains(userId)){
+            retweetedByUserIdList.add(userId);
+        }
+        throw new TwitterException("User already retweeted this tweet", HttpStatus.BAD_REQUEST);
+    }
+
+    public void removeRetweetedByUserIdList(Long userId){
+        if(retweetedByUserIdList == null){
+            throw new TwitterException("Cannot unretweet this tweet", HttpStatus.BAD_REQUEST);
+        }
+        if (retweetedByUserIdList.contains(userId)){
+            retweetedByUserIdList.remove(userId);
+        }
+        throw new TwitterException("Cannot unretweet this tweet", HttpStatus.BAD_REQUEST);
+    }
+
+    public void addCommentedByTweetIdList(Long tweetId){
+        if(commentedByTweetIdList == null){
+            commentedByTweetIdList = new ArrayList<>();
+        }
+        if (!commentedByTweetIdList.contains(tweetId)){
+            commentedByTweetIdList.add(tweetId);
+        }
+        throw new TwitterException("User already commented this tweet", HttpStatus.BAD_REQUEST);
+    }
+
+    public void removeCommentedByTweetIdList(Long tweetId){
+        if(commentedByTweetIdList == null){
+            throw new TwitterException("Cannot uncomment this tweet", HttpStatus.BAD_REQUEST);
+        }
+        if (commentedByTweetIdList.contains(tweetId)){
+            commentedByTweetIdList.remove(tweetId);
+        }
+        throw new TwitterException("Cannot uncomment this tweet", HttpStatus.BAD_REQUEST);
+    }
+
+
+
+
+
 }
