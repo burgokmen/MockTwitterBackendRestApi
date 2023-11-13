@@ -36,10 +36,7 @@ public class Converter {
     }
 
     public static TweetResponse tweetResponseConverter(Tweet tweet){
-        return new TweetResponse(tweet.getId(), tweet.getTweetBody(),
-                tweet.getCommentsNumber(), tweet.getRetweetsNumber(),
-                tweet.getLikesNumber(), formatDate(tweet.getCreatedAt()),
-                profileTweetResponseConverter(tweet.getProfile()));
+        return new TweetResponse(tweet.getId(), tweet.getTweetBody(), formatDate(tweet.getCreatedAt()), profileTweetResponseConverter(tweet.getProfile()),tweet.getLikedByUserIdList(), tweet.getCommentedByTweetIdList(), tweet.getRetweetedByUserIdList());
     }
 
     public static List<TweetResponse> tweetResponseListConverter(List<Tweet> tweetList){
