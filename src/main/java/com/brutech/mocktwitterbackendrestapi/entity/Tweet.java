@@ -42,6 +42,9 @@ public class Tweet {
     @Column(name= "commented_by_tweetId")
     private List<Long> commentedByTweetIdList;
 
+    @Column(name = "commented_tweet")
+    private Long commentedTweet;
+
     public void addLikedByUserId(Long userId){
         if(likedByUserIdList == null){
             likedByUserIdList = new ArrayList<>();
@@ -57,7 +60,7 @@ public class Tweet {
             throw new TwitterException("Cannot unlike this tweet", HttpStatus.BAD_REQUEST);
         }
         if (likedByUserIdList.contains(userId)){
-            likedByUserIdList.remove(userId);
+            likedByUserIdList.stream().filter(id -> !id.equals(userId)).collect(Collectors.toList());
         }
         throw new TwitterException("Cannot unlike this tweet", HttpStatus.BAD_REQUEST);
     }
@@ -77,7 +80,7 @@ public class Tweet {
             throw new TwitterException("Cannot unretweet this tweet", HttpStatus.BAD_REQUEST);
         }
         if (retweetedByUserIdList.contains(userId)){
-            retweetedByUserIdList.remove(userId);
+            retweetedByUserIdList.stream().filter(id -> !id.equals(userId)).collect(Collectors.toList());
         }
         throw new TwitterException("Cannot unretweet this tweet", HttpStatus.BAD_REQUEST);
     }
@@ -97,7 +100,7 @@ public class Tweet {
             throw new TwitterException("Cannot uncomment this tweet", HttpStatus.BAD_REQUEST);
         }
         if (commentedByTweetIdList.contains(tweetId)){
-            commentedByTweetIdList.remove(tweetId);
+            commentedByTweetIdList.stream().filter(id -> !id.equals(tweetId)).collect(Collectors.toList());
         }
         throw new TwitterException("Cannot uncomment this tweet", HttpStatus.BAD_REQUEST);
     }
