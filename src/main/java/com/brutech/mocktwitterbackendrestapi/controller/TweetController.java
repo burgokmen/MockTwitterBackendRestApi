@@ -9,6 +9,7 @@ import com.brutech.mocktwitterbackendrestapi.util.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -41,6 +42,7 @@ public class TweetController {
     @PostMapping("/")
     public TweetResponse saveTweet(@RequestBody Tweet tweet){
         Profile profile = profileService.getUserById(tweet.getProfile().getId());
+        tweet.setCommentedTweet(Long.parseLong("0"));
         tweet.setProfile(profile);
         return Converter.tweetResponseConverter(tweetService.saveTweet(tweet));
     }
@@ -55,6 +57,22 @@ public class TweetController {
 
     @DeleteMapping("/{id}")
     public TweetResponse deleteTweet(@PathVariable Long id){
+        Tweet tweet = tweetService.getTweetById(id);
+        tweet.setCommentedTweet(Long.parseLong("0"));
+        if (!(tweet.getCommentedByTweetIdList().isEmpty())){
+            tweet.getCommentedByTweetIdList().forEach(tweetId -> {
+                Tweet tweet1 = tweetService.getTweetById(tweetId);
+                tweet1.setCommentedTweet(Long.parseLong("0"));
+                tweetService.saveTweet(tweet1);
+            });
+            tweet.setCommentedByTweetIdList(new ArrayList<>());
+            tweet.setCommentedTweet(Long.parseLong("0"));
+            tweetService.saveTweet(tweet);
+        }
+        if(tweet.getCommentedTweet() != 0){
+            Tweet tweet1 = tweetService.getTweetById(tweet.getCommentedTweet());
+            tweet1.removeCommentedByTweetIdList(id);
+        }
         return Converter.tweetResponseConverter(tweetService.deleteTweet(id));
     }
 
@@ -120,9 +138,18 @@ public class TweetController {
             Tweet commentedTweet = tweetService.getTweetById(id);
             Profile profile = profileService.getUserById(tweet.getProfile().getId());
             tweet.setProfile(profile);
+            tweet.setCommentedTweet(id);
             Tweet tweet1 = tweetService.saveTweet(tweet);
             commentedTweet.addCommentedByTweetIdList(tweet1.getId());
             return Converter.tweetResponseConverter(tweetService.saveTweet(tweet1));
+        }
+
+        @DeleteMapping("/comment/{id}")
+        public TweetResponse deleteCommentTweet(@PathVariable Long id){
+            Tweet tweet = tweetService.getTweetById(id);
+            Tweet commentedTweet = tweetService.getTweetById(tweet.getCommentedTweet());
+            commentedTweet.removeCommentedByTweetIdList(id);
+            return Converter.tweetResponseConverter(tweetService.deleteTweet(id));
         }
 
 
