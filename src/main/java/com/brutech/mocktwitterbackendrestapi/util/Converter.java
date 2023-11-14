@@ -26,9 +26,8 @@ public class Converter {
     }
 
     public static ProfileTweetResponse profileTweetResponseConverter(Profile profile){
-        return new ProfileTweetResponse(profile.getId(), profile.getFirstName(), profile.getLastName(),
-                profile.getProfilePicture(),
-                profile.getUserHandle());
+        return new ProfileTweetResponse(profile.getId(), profile.getFirstName(),
+                profile.getLastName(), profile.getProfilePicture(), profile.getUserHandle());
     }
 
     public static List<ProfileTweetResponse> profileTweetResponseListConverter(List<Profile> profileList){
@@ -36,7 +35,10 @@ public class Converter {
     }
 
     public static TweetResponse tweetResponseConverter(Tweet tweet){
-        return new TweetResponse(tweet.getId(), tweet.getTweetBody(), formatDate(tweet.getCreatedAt()), profileTweetResponseConverter(tweet.getProfile()),tweet.getLikedByUserIdList(), tweet.getCommentedByTweetIdList(), tweet.getRetweetedByUserIdList(), tweet.getCommentedTweet());
+        return new TweetResponse(tweet.getId(), tweet.getTweetBody(),
+                formatDate(tweet.getCreatedAt()), profileTweetResponseConverter(tweet.getProfile()),
+                tweet.getLikedByUserIdList(), tweet.getCommentedByTweetIdList(),
+                tweet.getRetweetedByUserIdList(), tweet.getCommentedTweet());
     }
 
     public static List<TweetResponse> tweetResponseListConverter(List<Tweet> tweetList){

@@ -42,7 +42,8 @@ public class AuthenticationService {
         Optional<Profile> profileOptional = profileRepository.getUserByEmail(loginProfileDto.email());
         if (profileOptional.isPresent()) {
             Profile profile = profileOptional.get();
-            boolean isPasswordMatched = passwordEncoder.matches(loginProfileDto.password(), profile.getPassword());
+            boolean isPasswordMatched = passwordEncoder
+                    .matches(loginProfileDto.password(), profile.getPassword());
             if (isPasswordMatched) {
                 return profile;
             }

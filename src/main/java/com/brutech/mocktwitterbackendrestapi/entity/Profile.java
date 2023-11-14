@@ -54,9 +54,11 @@ public class Profile implements UserDetails {
     @Column(name = "profile_walpaper")
     private String profileWalpaper;
 
+    @ElementCollection
     @Column(name = "liked_tweets")
     private List<Long> likedTweetIdsList;
 
+    @ElementCollection
     @Column(name = "s ")
     private List<Long> retweetsTweetsIdList;
 

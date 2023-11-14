@@ -27,7 +27,8 @@ public class ProfileController {
 
     @PostMapping("/register")
     public ProfileResponse register(@RequestBody Profile profile){
-            return Converter.profileResponseConverter(profileService.registerUser(authenticationService.register(profile)));
+            return Converter.profileResponseConverter(profileService
+                    .registerUser(authenticationService.register(profile)));
     }
 
     @PostMapping("/login")

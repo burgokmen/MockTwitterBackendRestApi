@@ -33,12 +33,15 @@ public class Tweet {
     @JoinColumn(name = "user_id")
     private Profile profile;
 
+    @ElementCollection
     @Column(name= "liked_by_userId")
     private List<Long> likedByUserIdList;
 
+    @ElementCollection
     @Column(name= "retweeted_by_userId")
     private List<Long> retweetedByUserIdList;
 
+    @ElementCollection
     @Column(name= "commented_by_tweetId")
     private List<Long> commentedByTweetIdList;
 
@@ -60,7 +63,8 @@ public class Tweet {
             throw new TwitterException("Cannot unlike this tweet", HttpStatus.BAD_REQUEST);
         }
         if (likedByUserIdList.contains(userId)){
-            likedByUserIdList.stream().filter(id -> !id.equals(userId)).collect(Collectors.toList());
+            likedByUserIdList.stream()
+                    .filter(id -> !id.equals(userId)).collect(Collectors.toList());
         }
         throw new TwitterException("Cannot unlike this tweet", HttpStatus.BAD_REQUEST);
     }
@@ -80,7 +84,8 @@ public class Tweet {
             throw new TwitterException("Cannot unretweet this tweet", HttpStatus.BAD_REQUEST);
         }
         if (retweetedByUserIdList.contains(userId)){
-            retweetedByUserIdList.stream().filter(id -> !id.equals(userId)).collect(Collectors.toList());
+            retweetedByUserIdList.stream()
+                    .filter(id -> !id.equals(userId)).collect(Collectors.toList());
         }
         throw new TwitterException("Cannot unretweet this tweet", HttpStatus.BAD_REQUEST);
     }
@@ -100,7 +105,8 @@ public class Tweet {
             throw new TwitterException("Cannot uncomment this tweet", HttpStatus.BAD_REQUEST);
         }
         if (commentedByTweetIdList.contains(tweetId)){
-            commentedByTweetIdList.stream().filter(id -> !id.equals(tweetId)).collect(Collectors.toList());
+            commentedByTweetIdList.stream()
+                    .filter(id -> !id.equals(tweetId)).collect(Collectors.toList());
         }
         throw new TwitterException("Cannot uncomment this tweet", HttpStatus.BAD_REQUEST);
     }
