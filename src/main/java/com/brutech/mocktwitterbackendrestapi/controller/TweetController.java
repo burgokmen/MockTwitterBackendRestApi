@@ -60,23 +60,28 @@ public class TweetController {
 
     @PostMapping("/like/{id}")
     public TweetResponse likeTweet(@PathVariable Long id, @RequestBody Profile profile){
-        Tweet tweet = tweetService.getTweetById(id);
-       Profile profile1 = profileService.getUserById(profile.getId());
-        profile1.addLikedTweetIds(tweet.getId());
-        tweet.addLikedByUserId(profile1.getId());
-        return Converter.tweetResponseConverter(tweetService.saveTweet(tweet));
+        return processTweet(id, profile, true);
     }
 
     @PostMapping("/unlike/{id}")
     public TweetResponse unlikeTweet(@PathVariable Long id, @RequestBody Profile profile){
+        return processTweet(id, profile, false);
+    }
+
+    private TweetResponse processTweet(Long id, Profile profile, boolean isLike){
         Tweet tweet = tweetService.getTweetById(id);
         Profile profile1 = profileService.getUserById(profile.getId());
-        profile1.removeLikedTweetIds(tweet.getId());
-        tweet.removeLikedByUserId(profile1.getId());
+        if(isLike){
+            profile1.addLikedTweetIds(tweet.getId());
+            tweet.addLikedByUserId(profile1.getId());
+        }else{
+            profile1.removeLikedTweetIds(tweet.getId());
+            tweet.removeLikedByUserId(profile1.getId());
+        }
         return Converter.tweetResponseConverter(tweetService.saveTweet(tweet));
     }
 
-        @PostMapping("/retweet/{id}")
+    /*    @PostMapping("/retweet/{id}")
         public TweetResponse retweetTweet(@PathVariable Long id, @RequestBody Profile profile){
             Tweet tweet = tweetService.getTweetById(id);
             Profile profile1 = profileService.getUserById(profile.getId());
@@ -92,7 +97,23 @@ public class TweetController {
             profile1.removeRetweetsTweetsIdList(tweet.getId());
             tweet.removeRetweetedByUserIdList(profile1.getId());
             return Converter.tweetResponseConverter(tweetService.saveTweet(tweet));
+        }*/
+
+    @PostMapping("/retweet/{id}")
+    public TweetResponse processRetweet(@PathVariable Long id, @RequestBody Profile profile, @RequestParam boolean isRetweet){
+        Tweet tweet = tweetService.getTweetById(id);
+        Profile profile1 = profileService.getUserById(profile.getId());
+        if(isRetweet){
+            profile1.addRetweetsTweetsIdList(tweet.getId());
+            tweet.addRetweetedByUserIdList(profile1.getId());
+        }else{
+            profile1.removeRetweetsTweetsIdList(tweet.getId());
+            tweet.removeRetweetedByUserIdList(profile1.getId());
         }
+        return Converter.tweetResponseConverter(tweetService.saveTweet(tweet));
+    }
+
+
 
         @PostMapping("/comment/{id}")
         public TweetResponse commentTweet(@PathVariable Long id, @RequestBody Tweet tweet){
