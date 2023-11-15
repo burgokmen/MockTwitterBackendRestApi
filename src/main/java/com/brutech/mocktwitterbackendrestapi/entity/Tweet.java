@@ -23,7 +23,7 @@ public class Tweet {
     private Long id;
 
     @Column(name = "tweet_body")
-    private String tweetBody;
+        private String tweetBody;
 
 
     @Column(name = "created_at")
@@ -33,16 +33,16 @@ public class Tweet {
     @JoinColumn(name = "user_id")
     private Profile profile;
 
-    @ElementCollection
-    @Column(name= "liked_by_userId")
+
+    @Column(name= "liked_by_user_id")
     private List<Long> likedByUserIdList;
 
-    @ElementCollection
-    @Column(name= "retweeted_by_userId")
+
+    @Column(name= "retweeted_by_user_id")
     private List<Long> retweetedByUserIdList;
 
-    @ElementCollection
-    @Column(name= "commented_by_tweetId")
+
+    @Column(name= "commented_by_tweet_id")
     private List<Long> commentedByTweetIdList;
 
     @Column(name = "commented_tweet")

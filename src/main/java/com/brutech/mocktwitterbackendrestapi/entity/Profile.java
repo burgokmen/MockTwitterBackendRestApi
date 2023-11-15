@@ -51,16 +51,16 @@ public class Profile implements UserDetails {
     @Column(name = "profile_picture")
     private String profilePicture;
 
-    @Column(name = "profile_walpaper")
-    private String profileWalpaper;
+    @Column(name = "profile_wallpaper")
+    private String profileWallpaper;
 
-    @ElementCollection
+
     @Column(name = "liked_tweets")
     private List<Long> likedTweetIdsList;
 
-    @ElementCollection
-    @Column(name = "s ")
-    private List<Long> retweetsTweetsIdList;
+
+    @Column(name = "retweeted_tweets ")
+    private List<Long> retweetedTweetsIdList;
 
     @OneToMany(mappedBy = "profile")
     private List<Tweet> tweetsList;
@@ -98,22 +98,22 @@ public class Profile implements UserDetails {
         throw new TwitterException("Cannot unlike this tweet", HttpStatus.BAD_REQUEST);
     }
 
-    public void addRetweetsTweetsIdList(long id) {
-        if (retweetsTweetsIdList == null) {
-            retweetsTweetsIdList = new ArrayList<>();
+    public void addRetweetedTweetsIdList(long id) {
+        if (retweetedTweetsIdList == null) {
+            retweetedTweetsIdList = new ArrayList<>();
         }
-        if (!retweetsTweetsIdList.contains(id)) {
-            retweetsTweetsIdList.add(id);
+        if (!retweetedTweetsIdList.contains(id)) {
+            retweetedTweetsIdList.add(id);
         }
         throw new TwitterException("User already retweeted this tweet", HttpStatus.BAD_REQUEST);
     }
 
-    public void removeRetweetsTweetsIdList(long id) {
-        if (retweetsTweetsIdList == null) {
+    public void removeRetweetedTweetsIdList(long id) {
+        if (retweetedTweetsIdList == null) {
             throw new TwitterException("Cannot unretweet this tweet", HttpStatus.BAD_REQUEST);
         }
-        if (retweetsTweetsIdList.contains(id)) {
-            retweetsTweetsIdList.remove(id);
+        if (retweetedTweetsIdList.contains(id)) {
+            retweetedTweetsIdList.remove(id);
         }
         throw new TwitterException("Cannot unretweet this tweet", HttpStatus.BAD_REQUEST);
     }

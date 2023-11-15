@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:4000")
 @RestController
 @RequestMapping("/tweet")
 public class TweetController {
@@ -59,12 +59,12 @@ public class TweetController {
     public TweetResponse deleteTweet(@PathVariable Long id){
         Tweet tweet = tweetService.getTweetById(id);
         tweet.setCommentedTweet(Long.parseLong("0"));
-        if (!(tweet.getCommentedByTweetIdList().isEmpty())){
-            tweet.getCommentedByTweetIdList().forEach(tweetId -> {
+        if (!(tweet.getCommentedByTweetIdList() == null)){
+            for(Long tweetId : tweet.getCommentedByTweetIdList()) {
                 Tweet tweet1 = tweetService.getTweetById(tweetId);
-                tweet1.setCommentedTweet(Long.parseLong("0"));
+                tweet1.setCommentedTweet(0L);
                 tweetService.saveTweet(tweet1);
-            });
+            };
             tweet.setCommentedByTweetIdList(new ArrayList<>());
             tweet.setCommentedTweet(Long.parseLong("0"));
             tweetService.saveTweet(tweet);
@@ -122,10 +122,10 @@ public class TweetController {
         Tweet tweet = tweetService.getTweetById(id);
         Profile profile1 = profileService.getUserById(profile.getId());
         if(isRetweet){
-            profile1.addRetweetsTweetsIdList(tweet.getId());
+            profile1.addRetweetedTweetsIdList(tweet.getId());
             tweet.addRetweetedByUserIdList(profile1.getId());
         }else{
-            profile1.removeRetweetsTweetsIdList(tweet.getId());
+            profile1.removeRetweetedTweetsIdList(tweet.getId());
             tweet.removeRetweetedByUserIdList(profile1.getId());
         }
         return Converter.tweetResponseConverter(tweetService.saveTweet(tweet));

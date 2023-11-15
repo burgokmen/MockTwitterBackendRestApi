@@ -13,13 +13,13 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
             "AS p WHERE p.email =:email", nativeQuery = true)
     String emailChecker(String email);
 
-    @Query(value = "SELECT p.phone FROM twitter.profile " +
-            "AS p WHERE p.phone =:phone", nativeQuery = true)
-    String phoneChecker(String phone);
+    @Query(value = "SELECT p.cellular FROM twitter.profile " +
+            "AS p WHERE p.cellular =:cellular", nativeQuery = true)
+    String phoneChecker(String cellular);
 
-    @Query(value = "SELECT p.username FROM twitter.profile " +
-            "AS p WHERE p.username =:username", nativeQuery = true)
-    String usernameChecker(String username);
+    @Query(value = "SELECT p.user_handle FROM twitter.profile " +
+            "AS p WHERE p.user_handle =:userHandle", nativeQuery = true)
+    String usernameChecker(String userHandle);
 
 
 

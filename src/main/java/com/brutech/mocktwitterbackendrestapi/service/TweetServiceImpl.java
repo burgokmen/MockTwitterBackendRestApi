@@ -54,7 +54,7 @@ public class TweetServiceImpl implements TweetService{
 
     @Override
     public List<Tweet> getAllTweetsByUserId(Long id) {
-        List<Tweet> tweetList = tweetRepository.getTweetByUserId(Math.toIntExact(id));
+        List<Tweet> tweetList = tweetRepository.getTweetByUserId(id);
         if (!tweetList.isEmpty()) {
             return tweetList;
         } else {

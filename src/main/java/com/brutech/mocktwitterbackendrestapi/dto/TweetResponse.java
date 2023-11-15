@@ -1,6 +1,6 @@
 package com.brutech.mocktwitterbackendrestapi.dto;
 
-import java.util.Date;
+
 import java.util.List;
 
 public record TweetResponse(long tweetId, String tweetBody,

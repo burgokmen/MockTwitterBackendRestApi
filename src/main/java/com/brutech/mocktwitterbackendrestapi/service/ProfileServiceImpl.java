@@ -66,10 +66,8 @@ public class ProfileServiceImpl implements ProfileService{
     }
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return (UserDetails) profileRepository.getUserByEmail(email)
-                .orElseThrow(()-> {
-                    return new UsernameNotFoundException("User credentials are not valid");
-        });
+        return profileRepository.getUserByEmail(email)
+                .orElseThrow(()-> new UsernameNotFoundException("User credentials are not valid"));
     }
 
 

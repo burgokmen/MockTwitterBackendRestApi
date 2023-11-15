@@ -31,7 +31,7 @@ public class AuthenticationService {
     profile1.setFirstName(profile.getFirstName());
     profile1.setLastName(profile.getLastName());
     profile1.setProfilePicture(profile.getProfilePicture());
-    profile1.setProfileWalpaper(profile.getProfileWalpaper());
+    profile1.setProfileWallpaper(profile.getProfileWallpaper());
     profile1.setCreatedAt(profile.getCreatedAt());
     profile1.setLocation(profile.getLocation());
     profile1.setPassword(encodedPassword);
