@@ -6,7 +6,9 @@ import com.brutech.mocktwitterbackendrestapi.entity.Tweet;
 import com.brutech.mocktwitterbackendrestapi.service.ProfileService;
 import com.brutech.mocktwitterbackendrestapi.service.TweetService;
 import com.brutech.mocktwitterbackendrestapi.util.Converter;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4000")
 @RestController
 @RequestMapping("/tweet")
+@Validated
 public class TweetController {
     private TweetService tweetService;
     private ProfileService profileService;
@@ -30,12 +33,12 @@ public class TweetController {
     }
 
     @GetMapping("/profile/{UserId}")
-    public List<TweetResponse> getAllTweetsByUserId(@PathVariable Long UserId){
+    public List<TweetResponse> getAllTweetsByUserId(@Positive @PathVariable Long UserId){
         return Converter.tweetResponseListConverter(tweetService.getAllTweetsByUserId(UserId));
     }
 
     @GetMapping("/{id}")
-    public TweetResponse getTweetById(@PathVariable Long id){
+    public TweetResponse getTweetById(@Positive @PathVariable Long id){
         return Converter.tweetResponseConverter(tweetService.getTweetById(id));
     }
 
@@ -48,7 +51,7 @@ public class TweetController {
     }
 
     @PutMapping("/{id}")
-    public TweetResponse updateTweet(@RequestBody Tweet tweet, @PathVariable long id){
+    public TweetResponse updateTweet(@RequestBody Tweet tweet,@Positive @PathVariable long id){
         Profile profile = profileService.getUserById(tweet.getProfile().getId());
         tweet.setProfile(profile);
         tweet.setId(id);
@@ -56,7 +59,7 @@ public class TweetController {
     }
 
     @DeleteMapping("/{id}")
-    public TweetResponse deleteTweet(@PathVariable Long id){
+    public TweetResponse deleteTweet(@Positive @PathVariable Long id){
         Tweet tweet = tweetService.getTweetById(id);
         tweet.setCommentedTweet(Long.parseLong("0"));
         if (!(tweet.getCommentedByTweetIdList() == null)){
@@ -77,12 +80,12 @@ public class TweetController {
     }
 
     @PostMapping("/like/{id}")
-    public TweetResponse likeTweet(@PathVariable Long id, @RequestBody Profile profile){
+    public TweetResponse likeTweet(@Positive @PathVariable Long id, @RequestBody Profile profile){
         return processTweet(id, profile, true);
     }
 
     @PostMapping("/unlike/{id}")
-    public TweetResponse unlikeTweet(@PathVariable Long id, @RequestBody Profile profile){
+    public TweetResponse unlikeTweet(@Positive @PathVariable Long id, @RequestBody Profile profile){
         return processTweet(id, profile, false);
     }
 
@@ -118,7 +121,7 @@ public class TweetController {
         }*/
 
     @PostMapping("/retweet/{id}")
-    public TweetResponse processRetweet(@PathVariable Long id, @RequestBody Profile profile, @RequestParam boolean isRetweet){
+    public TweetResponse processRetweet(@Positive @PathVariable Long id, @RequestBody Profile profile, @RequestParam boolean isRetweet){
         Tweet tweet = tweetService.getTweetById(id);
         Profile profile1 = profileService.getUserById(profile.getId());
         if(isRetweet){
@@ -134,7 +137,7 @@ public class TweetController {
 
 
         @PostMapping("/comment/{id}")
-        public TweetResponse commentTweet(@PathVariable Long id, @RequestBody Tweet tweet){
+        public TweetResponse commentTweet(@Positive @PathVariable Long id, @RequestBody Tweet tweet){
             Tweet commentedTweet = tweetService.getTweetById(id);
             Profile profile = profileService.getUserById(tweet.getProfile().getId());
             tweet.setProfile(profile);
@@ -145,7 +148,7 @@ public class TweetController {
         }
 
         @DeleteMapping("/comment/{id}")
-        public TweetResponse deleteCommentTweet(@PathVariable Long id){
+        public TweetResponse deleteCommentTweet(@Positive @PathVariable Long id){
             Tweet tweet = tweetService.getTweetById(id);
             Tweet commentedTweet = tweetService.getTweetById(tweet.getCommentedTweet());
             commentedTweet.removeCommentedByTweetIdList(id);

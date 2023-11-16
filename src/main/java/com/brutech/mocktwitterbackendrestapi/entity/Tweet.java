@@ -2,6 +2,7 @@ package com.brutech.mocktwitterbackendrestapi.entity;
 
 import com.brutech.mocktwitterbackendrestapi.exceptions.TwitterException;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ public class Tweet {
     @Column(name = "id")
     private Long id;
 
+    @NotNull(message = "Tweet body cannot be null")
     @Column(name = "tweet_body")
         private String tweetBody;
 

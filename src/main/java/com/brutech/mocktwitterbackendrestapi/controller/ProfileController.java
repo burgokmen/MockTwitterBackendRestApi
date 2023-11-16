@@ -6,7 +6,9 @@ import com.brutech.mocktwitterbackendrestapi.entity.Profile;
 import com.brutech.mocktwitterbackendrestapi.service.AuthenticationService;
 import com.brutech.mocktwitterbackendrestapi.service.ProfileService;
 import com.brutech.mocktwitterbackendrestapi.util.Converter;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:4000")
 @RestController
 @RequestMapping("/profile")
+@Validated
 public class ProfileController {
     private ProfileService profileService;
     private AuthenticationService authenticationService;
@@ -26,7 +29,7 @@ public class ProfileController {
 
 
     @PostMapping("/register")
-    public ProfileResponse register(@RequestBody Profile profile){
+    public ProfileResponse register(@Validated @RequestBody Profile profile){
             return Converter.profileResponseConverter(profileService
                     .registerUser(authenticationService.register(profile)));
     }
@@ -38,7 +41,7 @@ public class ProfileController {
     }
 
     @DeleteMapping("/{id}")
-    public ProfileResponse deleteUser(@PathVariable Long id){
+    public ProfileResponse deleteUser(@Positive @PathVariable Long id){
         return Converter.profileResponseConverter(profileService.deleteUser(id));
     }
 }

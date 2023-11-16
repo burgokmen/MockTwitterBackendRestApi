@@ -2,6 +2,8 @@ package com.brutech.mocktwitterbackendrestapi.entity;
 
 import com.brutech.mocktwitterbackendrestapi.exceptions.TwitterException;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,15 +26,21 @@ public class Profile implements UserDetails {
     @Column(name = "user_handle")
     private String userHandle;
 
+    @NotNull(message = "First name cannot be null")
+    @Size(min = 2, message = "First name must be at least 2 characters")
     @Column(name = "first_name")
     private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
 
+    @NotNull(message = "Email cannot be null")
+    @Size(min = 5, message = "Email must be at least 5 characters")
     @Column(name = "email")
     private String email;
 
+    @NotNull(message = "Password cannot be null")
+    @Size(min = 8, message = "Password must be at least 8 characters")
     @Column(name = "password")
     private String password;
 
