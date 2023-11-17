@@ -35,15 +35,15 @@ public class Tweet {
     @JoinColumn(name = "user_id")
     private Profile profile;
 
-
+    @ElementCollection
     @Column(name= "liked_by_user_id")
     private List<Long> likedByUserIdList;
 
-
+    @ElementCollection
     @Column(name= "retweeted_by_user_id")
     private List<Long> retweetedByUserIdList;
 
-
+    @ElementCollection
     @Column(name= "commented_by_tweet_id")
     private List<Long> commentedByTweetIdList;
 
