@@ -44,4 +44,16 @@ public class ProfileController {
     public ProfileResponse deleteUser(@Positive @PathVariable Long id){
         return Converter.profileResponseConverter(profileService.deleteUser(id));
     }
+
+   /* @PostMapping("/follow/{id}")
+    public ProfileResponse followUser(@Positive @PathVariable Long id, @RequestBody Profile followedUser){
+        Profile followerUser = profileService.getUserById(id);
+        Profile followedUser2 = profileService.getUserById(followedUser.getId());
+        followerUser.addFollowedUser(followedUser2);
+        followedUser.addFollowerUser(followerUser);
+        profileService.registerUser(followerUser);
+        return Converter.profileResponseConverter(followerUser);
+    }*/
+
+
 }

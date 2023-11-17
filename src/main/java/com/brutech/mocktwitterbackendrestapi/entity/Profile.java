@@ -62,22 +62,30 @@ public class Profile implements UserDetails {
     @Column(name = "profile_wallpaper")
     private String profileWallpaper;
 
-
+    @ElementCollection
     @Column(name = "liked_tweets")
     private List<Long> likedTweetIdsList;
 
-
+    @ElementCollection
     @Column(name = "retweeted_tweets ")
     private List<Long> retweetedTweetsIdList;
 
     @OneToMany(mappedBy = "profile")
     private List<Tweet> tweetsList;
 
-    @OneToMany(mappedBy = "followedUser")
-    private List<FollowToFollow> followedUserList;
+/*    @ManyToMany
+    @JoinTable(
+            name = "follow_to_follow",
+            joinColumns = @JoinColumn(name = "followed_id"),
+            inverseJoinColumns = @JoinColumn(name = "follower_id"))
+    private List<Profile> followedUserList;
 
-    @OneToMany(mappedBy = "followerUser")
-    private List<FollowToFollow> followerUserList;
+    @ManyToMany
+    @JoinTable(
+            name = "follow_to_follow",
+            joinColumns = @JoinColumn(name = "follower_id"),
+            inverseJoinColumns = @JoinColumn(name = "followed_id"))
+    private List<Profile> followerUserList;*/
 
     public void addTweet(Tweet tweet) {
         if(tweetsList == null) {
@@ -126,19 +134,33 @@ public class Profile implements UserDetails {
         throw new TwitterException("Cannot unretweet this tweet", HttpStatus.BAD_REQUEST);
     }
 
-    public void addFollowedUser(FollowToFollow followToFollow) {
+ /*   public void addFollowedUser(Profile profile) {
         if(followedUserList == null) {
             followedUserList = new LinkedList<>();
         }
-        followedUserList.add(followToFollow);
+        followedUserList.add(profile);
     }
 
-    public void addFollowerUser(FollowToFollow followToFollow) {
+    public void addFollowerUser(Profile profile) {
         if(followerUserList == null) {
             followerUserList = new LinkedList<>();
         }
-        followerUserList.add(followToFollow);
+        followerUserList.add(profile);
     }
+
+    public void removeFollowedUser(Profile profile) {
+        if(followedUserList == null) {
+            throw new TwitterException("Cannot unfollow this user", HttpStatus.BAD_REQUEST);
+        }
+        followedUserList.remove(profile);
+    }
+
+    public void removeFollowerUser(Profile profile) {
+        if(followerUserList == null) {
+            throw new TwitterException("Cannot unfollow this user", HttpStatus.BAD_REQUEST);
+        }
+        followerUserList.remove(profile);
+    }*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

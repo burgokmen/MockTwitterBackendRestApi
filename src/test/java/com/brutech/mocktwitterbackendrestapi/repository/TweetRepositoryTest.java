@@ -26,10 +26,7 @@ public class TweetRepositoryTest {
         newTweet("Tweet 1", futureDate, new ArrayList<>(),
                 new ArrayList<>(), new ArrayList<>(), Long.parseLong("2"));
     }
-    @AfterEach
-    void tearDown() {
-        tweetRepository.deleteAll();
-    }
+
 
     @Test
     void getTweetByUserId() {
