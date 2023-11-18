@@ -16,7 +16,7 @@ public class Converter {
                 profile.getLastName(), profile.getEmail(), profile.getPassword(),
                 profile.getCellular(), formatDate(profile.getBirthday()),
                 formatDate(profile.getCreatedAt()), profile.getLocation(),
-                profile.getProfilePicture());
+                profile.getProfilePicture(), profile.getProfileWallpaper());
     }
 
 
