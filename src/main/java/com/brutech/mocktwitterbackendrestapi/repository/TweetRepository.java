@@ -14,4 +14,10 @@ public interface TweetRepository extends JpaRepository<Tweet, Long> {
             "WHERE p.id = :id " +
             "ORDER BY t.id DESC", nativeQuery = true)
     List<Tweet> getTweetByUserId(Long id);
+
+    @Query(value = "SELECT * FROM tweet t " +
+            "INNER JOIN profile p ON t.user_id = p.id " +
+            "WHERE p.user_handle = :userHandle " +
+            "ORDER BY t.id DESC", nativeQuery = true)
+    List<Tweet> getAllTweetsByUserHandle(String userHandle);
 }

@@ -64,5 +64,17 @@ public class TweetServiceImpl implements TweetService{
 
     }
 
+    @Override
+    public List<Tweet> getAllTweetsByUserHandle(String userHandle) {
+        List<Tweet> tweetList = tweetRepository.getAllTweetsByUserHandle(userHandle);
+        if (!tweetList.isEmpty()) {
+            return tweetList;
+        } else {
+            throw new TwitterException("Tweet not found for user handle :: " + userHandle, HttpStatus.NOT_FOUND);
+
+        }
+
+    }
+
 
 }

@@ -10,4 +10,5 @@ public interface TweetService {
     Tweet saveTweet(Tweet tweet);
     Tweet deleteTweet(Long id);
     List<Tweet> getAllTweetsByUserId(Long id);
+    List<Tweet> getAllTweetsByUserHandle(String userHandle);
 }
