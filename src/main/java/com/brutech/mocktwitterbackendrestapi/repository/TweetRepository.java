@@ -9,15 +9,14 @@ import java.util.List;
 public interface TweetRepository extends JpaRepository<Tweet, Long> {
 
 
-    @Query(value = "SELECT * FROM tweet t " +
-            "INNER JOIN profile p ON t.user_id = p.id " +
-            "WHERE p.id = :id " +
-            "ORDER BY t.id DESC", nativeQuery = true)
+    @Query("SELECT t FROM Tweet t " +
+            "INNER JOIN t.profile p " +
+            "WHERE p.id = :id ORDER BY t.id DESC")
     List<Tweet> getTweetByUserId(Long id);
 
-    @Query(value = "SELECT * FROM tweet t " +
-            "INNER JOIN profile p ON t.user_id = p.id " +
-            "WHERE p.user_handle = :userHandle " +
-            "ORDER BY t.id DESC", nativeQuery = true)
+
+   @Query("SELECT t FROM Tweet t " +
+            "INNER JOIN t.profile p " +
+            "WHERE p.userHandle = :userHandle ORDER BY t.id DESC")
     List<Tweet> getAllTweetsByUserHandle(String userHandle);
 }
