@@ -35,17 +35,18 @@ public class Tweet {
     @JoinColumn(name = "user_id")
     private Profile profile;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name= "liked_by_user_id")
     private List<Long> likedByUserIdList;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name= "retweeted_by_user_id")
     private List<Long> retweetedByUserIdList;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name= "commented_by_tweet_id")
     private List<Long> commentedByTweetIdList;
+
 
     @Column(name = "commented_tweet")
     private Long commentedTweet;
