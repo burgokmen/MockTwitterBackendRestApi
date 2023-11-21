@@ -3,11 +3,16 @@ package com.brutech.mocktwitterbackendrestapi.controller;
 import com.brutech.mocktwitterbackendrestapi.dto.TweetResponse;
 import com.brutech.mocktwitterbackendrestapi.entity.Profile;
 import com.brutech.mocktwitterbackendrestapi.entity.Tweet;
+import com.brutech.mocktwitterbackendrestapi.exceptions.TwitterException;
 import com.brutech.mocktwitterbackendrestapi.service.ProfileService;
 import com.brutech.mocktwitterbackendrestapi.service.TweetService;
 import com.brutech.mocktwitterbackendrestapi.util.Converter;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.websocket.reactive.TomcatWebSocketReactiveWebServerCustomizer;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +25,12 @@ import java.util.List;
 public class TweetController {
     private TweetService tweetService;
     private ProfileService profileService;
+
     @Autowired
     public TweetController(TweetService tweetService, ProfileService profileService) {
         this.tweetService = tweetService;
         this.profileService = profileService;
+
     }
 
 
@@ -35,6 +42,11 @@ public class TweetController {
     @GetMapping("/profile/{UserId}")
     public List<TweetResponse> getAllTweetsByUserId(@Positive @PathVariable Long UserId){
         return Converter.tweetResponseListConverter(tweetService.getAllTweetsByUserId(UserId));
+    }
+
+    @GetMapping("/profile/id/{UserHandle}")
+    public List<TweetResponse> getAllTweetsByUserHandle(@PathVariable String UserHandle){
+        return Converter.tweetResponseListConverter(tweetService.getAllTweetsByUserHandle(UserHandle));
     }
 
     @GetMapping("/{id}")
@@ -52,22 +64,36 @@ public class TweetController {
 
     @PutMapping("/{id}")
     public TweetResponse updateTweet(@RequestBody Tweet tweet,@Positive @PathVariable long id){
-        Profile profile = profileService.getUserById(tweet.getProfile().getId());
-        tweet.setProfile(profile);
-        tweet.setId(id);
-        return Converter.tweetResponseConverter(tweetService.saveTweet(tweet));
+        Tweet tweet1 = tweetService.getTweetById(id);
+        tweet1.setTweetBody(tweet.getTweetBody());
+        return Converter.tweetResponseConverter(tweetService.saveTweet(tweet1));
     }
 
     @DeleteMapping("/{id}")
     public TweetResponse deleteTweet(@Positive @PathVariable Long id){
         Tweet tweet = tweetService.getTweetById(id);
         tweet.setCommentedTweet(Long.parseLong("0"));
-        if (!(tweet.getCommentedByTweetIdList() == null)){
-            for(Long tweetId : tweet.getCommentedByTweetIdList()) {
-                Tweet tweet1 = tweetService.getTweetById(tweetId);
-                tweet1.setCommentedTweet(0L);
-                tweetService.saveTweet(tweet1);
-            };
+       Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+       if(!(((Profile)auth.getPrincipal()).getEmail().equals(tweet.getProfile().getEmail()))) {
+
+           throw new TwitterException("You are not authorized to delete this tweet", HttpStatus.UNAUTHORIZED);
+       }
+
+        if(tweet.getCommentedByTweetIdList() == null ){
+            tweet.setCommentedByTweetIdList(new ArrayList<>());
+            tweet.setCommentedTweet(Long.parseLong("0"));
+            tweetService.saveTweet(tweet);
+        }
+
+        if( !(tweet.getCommentedByTweetIdList().isEmpty())){
+
+            for(Long i : tweet.getCommentedByTweetIdList()){
+                Tweet tweet3 = tweetService.getTweetById(i);
+                tweet3.setCommentedTweet(Long.parseLong("0"));
+                tweetService.saveTweet(tweet3);
+
+            }
             tweet.setCommentedByTweetIdList(new ArrayList<>());
             tweet.setCommentedTweet(Long.parseLong("0"));
             tweetService.saveTweet(tweet);
@@ -76,8 +102,13 @@ public class TweetController {
             Tweet tweet1 = tweetService.getTweetById(tweet.getCommentedTweet());
             tweet1.removeCommentedByTweetIdList(id);
         }
+
+
         return Converter.tweetResponseConverter(tweetService.deleteTweet(id));
     }
+
+
+
 
     @PostMapping("/like/{id}")
     public TweetResponse likeTweet(@Positive @PathVariable Long id, @RequestBody Profile profile){
