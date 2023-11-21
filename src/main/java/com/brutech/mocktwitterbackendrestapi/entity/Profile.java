@@ -62,15 +62,15 @@ public class Profile implements UserDetails {
     @Column(name = "profile_wallpaper")
     private String profileWallpaper;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "liked_tweets")
     private List<Long> likedTweetIdsList;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "retweeted_tweets ")
     private List<Long> retweetedTweetsIdList;
 
-    @OneToMany(mappedBy = "profile")
+    @OneToMany(mappedBy = "profile", fetch = FetchType.EAGER)
     private List<Tweet> tweetsList;
 
 /*    @ManyToMany
